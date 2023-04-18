@@ -19,7 +19,7 @@
             ],
             "intelliSenseMode": "gcc-x64",
             "includePath": [
-                "E:\\DeskTopTools\\ZET6App",
+                "E:\\DeskTopTools\\ZET6_Arduino_SmartCar",
                 "E:\\ArduinoData\\packages\\STMicroelectronics\\hardware\\stm32\\2.4.0\\cores\\arduino\\avr",
                 "E:\\ArduinoData\\packages\\STMicroelectronics\\hardware\\stm32\\2.4.0\\cores\\arduino\\stm32",
                 "E:\\ArduinoData\\packages\\STMicroelectronics\\hardware\\stm32\\2.4.0\\cores\\arduino\\stm32\\LL",
@@ -46,6 +46,7 @@
                 "E:\\ArduinoData\\packages\\STMicroelectronics\\hardware\\stm32\\2.4.0\\libraries\\SPI\\src",
                 "C:\\Users\\14980\\Documents\\Arduino\\libraries\\RF24",
                 "C:\\Users\\14980\\Documents\\Arduino\\libraries\\STM32duino_FreeRTOS\\src",
+                "E:\\ArduinoData\\packages\\STMicroelectronics\\hardware\\stm32\\2.4.0\\libraries\\Wire\\src",
                 "E:\\ArduinoData\\packages\\STMicroelectronics\\hardware\\stm32\\2.4.0\\libraries\\SrcWrapper\\src",
                 "e:\\arduinodata\\packages\\stmicroelectronics\\tools\\xpack-arm-none-eabi-gcc\\10.3.1-2.3\\arm-none-eabi\\include\\c++\\10.3.1",
                 "e:\\arduinodata\\packages\\stmicroelectronics\\tools\\xpack-arm-none-eabi-gcc\\10.3.1-2.3\\arm-none-eabi\\include\\c++\\10.3.1\\arm-none-eabi",
@@ -504,7 +505,8 @@
                 "__ATOMIC_ACQ_REL=4",
                 "__ATOMIC_RELEASE=3",
                 "USBCON"
-            ]
+            ],
+            "compileCommands": "${workspaceFolder}/Build/compile_commands.json"
         }
     ]
 }

@@ -1,8 +1,12 @@
+
 #include <Arduino.h>
 #include <STM32FreeRTOS.h>
 
 void Task_Screen(void *param);
 void Task_Radio(void *param);
+void Task_Wheel(void *param);
+void Task_Main(void *param);
+void Task_IICLight(void *param);
 
 /*if (radio.available())
     {

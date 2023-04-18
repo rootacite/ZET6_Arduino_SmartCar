@@ -6,7 +6,7 @@
     "configurations": [
         {
             "cwd": "${workspaceRoot}",
-            "executable": "./Build/ZET6App.ino.elf",
+            "executable": "./Build/ZET6_Arduino_SmartCar.ino.elf",
             "name": "Debug Microcontroller",
             "request": "launch",
             "type": "cortex-debug",

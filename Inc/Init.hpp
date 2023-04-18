@@ -12,57 +12,9 @@
 #include "def.h"
 
 SPIClass HSPI2(PB15, PB14, PB13);
-RF24* RADIO1=NULL;
+RF24 *RADIO1 = nullptr;
 
 const byte address[5] = {0xFF, 0xDD, 0xEE, 0xAA, 0x22};
-
-/////////////////////////////
-///Defintion of Tracking Pins
-/////////////////////////////
-
-#define TRACKING_FRONT_1 PF0
-#define TRACKING_FRONT_2 PF1
-#define TRACKING_FRONT_3 PF2
-#define TRACKING_FRONT_4 PF3
-#define TRACKING_FRONT_5 PF4
-
-#define TRACKING_LEFT_1 PE1
-#define TRACKING_LEFT_2 PE3
-#define TRACKING_LEFT_3 PE4
-#define TRACKING_LEFT_4 PE5
-#define TRACKING_LEFT_5 PE6
-
-#define TRACKING_RIGHT_1 PF6
-#define TRACKING_RIGHT_2 PF7
-#define TRACKING_RIGHT_3 PF8
-#define TRACKING_RIGHT_4 PF9
-#define TRACKING_RIGHT_5 PF10
-
-#define TRACKING_BACK_1 PG2
-#define TRACKING_BACK_2 PG3
-#define TRACKING_BACK_3 PG4
-#define TRACKING_BACK_4 PG5
-#define TRACKING_BACK_5 PG7
-
-/////////////////////////////
-///Defintion of Motor Pins
-/////////////////////////////
-
-#define FRONT_EN PC6
-#define FRONT_STP PB9
-#define FRONT_DIR PG0
-
-#define LEFT_EN PD13
-#define LEFT_STP PA3
-#define LEFT_DIR PF15
-
-#define RIGHT_EN PD12
-#define RIGHT_STP PA2
-#define RIGHT_DIR PF14
-
-#define BACK_EN PB8
-#define BACK_STP PA1
-#define BACK_DIR PF13
 
 void SetupInit()
 {
@@ -82,6 +34,9 @@ void SetupInit()
     /// Pull up BK and RST Pin
     /////////////////////////
 
+    Serial2.setRx(PA10);
+    Serial2.setTx(PA9);
+    Serial2.begin(115200);
 
     /////////////////////////
     /// Pull up BK and RST Pin
@@ -101,14 +56,6 @@ void SetupInit()
     /////////////////////////////////////////
     /// Init Stepper Motor Pins
     /////////////////////////////////////////
-
-    // Front Motor
-    pinMode(FRONT_EN, OUTPUT);
-    digitalWrite(FRONT_EN, LOW);
-    pinMode(FRONT_STP, OUTPUT);
-    digitalWrite(FRONT_STP, LOW);
-    pinMode(FRONT_DIR, OUTPUT);
-    digitalWrite(FRONT_DIR, LOW);
 
     // Left Motor
 
@@ -141,17 +88,17 @@ void SetupInit()
     /// Init 2.4G Communication
     /////////////////////////////////////////
 
-    RADIO1 = new RF24(PG15, PG8);
+   /*  RADIO1 = new RF24(PG15, PG8);
 
     bool r = RADIO1->begin(&HSPI2);
 
     while (!r)
-        delay(1);
+        return;
 
     RADIO1->setDataRate(RF24_1MBPS);
     RADIO1->setPALevel(RF24_PA_MIN);
     RADIO1->setChannel(37);
     RADIO1->setCRCLength(RF24_CRC_16);
     RADIO1->openReadingPipe(0, address);
-    RADIO1->startListening();
+    RADIO1->startListening(); */
 }
