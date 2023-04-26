@@ -1,3 +1,9 @@
+
+#ifndef _H_DEF
+#define _H_DEF
+
+typedef bool(*BOOL_CONDITION)();
+
 struct TxData
 {
     uint8_t sz;
@@ -47,3 +53,16 @@ struct TxData
 #define BACK_EN PD12
 #define BACK_STP PA2
 #define BACK_DIR PF14
+
+#define HAND PA6
+#define ARM_UPDOWM PB0
+#define ARM_ROUND PA7
+#define ARM_FB PB1
+
+#define PLANT PB6
+
+#define PULSE_MAX 8192
+#define PULSE_MIN 1637
+#define PULSE_MID 4915
+
+#endif

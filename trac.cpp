@@ -1,4 +1,6 @@
 
+#include "Inc/trac.h"
+
 // Defines the Current Trac Value
 uint8_t ad_refs_current[20] = {
     0, 0, 0, 0, 0,
@@ -7,32 +9,44 @@ uint8_t ad_refs_current[20] = {
     0, 0, 0, 0, 0};
 
 // Defines the Trac Value in Black Line
-const uint8_t ad_refs_black[20] = {
+uint8_t ad_refs_black[20] = {
     // ch1
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
+    20, 20, 15, 20, 30,
+    35, 30, 30, 30, 35,
     // ch2
-    26, 27, 24, 25, 36,
-    0, 0, 0, 0, 0};
+    40, 35, 20, 30, 35,
+    35, 25, 25, 20, 15};
 
 // Defines the Trac Value in White Area
-const uint8_t ad_refs_white[20] = {
+uint8_t ad_refs_white[20] = {
     // ch1
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
+    105, 135, 110, 95, 125,
+    135, 120, 100, 115, 105,
     // ch2
-    54, 57, 50, 52, 86,
-    0, 0, 0, 0, 0};
-
-#define MIN0(x) ((x) < 0 ? 0 : (x))
-
-#define TRAC_FRONT(x) (MIN0(ad_refs_current[10 + x] - ad_refs_black[10 + x]) / (float)(ad_refs_white[10 + x] - ad_refs_black[10 + x]))
-#define TRAC_BACK(x) (MIN0(ad_refs_current[x] - ad_refs_black[x]) / (float)(ad_refs_white[x] - ad_refs_black[x]))
-#define TRAC_LEFT(x) (MIN0(ad_refs_current[5 + x] - ad_refs_black[5 + x]) / (float)(ad_refs_white[5 + x] - ad_refs_black[5 + x]))
-#define TRAC_RIGHT(x) (MIN0(ad_refs_current[15 + x] - ad_refs_black[15 + x]) / (float)(ad_refs_white[15 + x] - ad_refs_black[15 + x]))
+    95, 95, 85, 90, 130,
+    90, 85, 95, 75, 65};
 
 void get_value_with_index(int index, float &l2, float &l1, float &m, float &r1, float &r2)
 {
+    Wire.requestFrom(0x20, 10);
+    for (int i = 0; i < 10;)
+    {
+        if (Wire.available())
+        {
+            ad_refs_current[i] = Wire.read();
+            i++;
+        }
+    }
+
+    Wire.requestFrom(0x21, 10);
+    for (int i = 0; i < 10;)
+    {
+        if (Wire.available())
+        {
+            ad_refs_current[i + 10] = Wire.read();
+            i++;
+        }
+    }
     // index 0 ~ 3 F L R B
     switch (index)
     {
@@ -42,21 +56,21 @@ void get_value_with_index(int index, float &l2, float &l1, float &m, float &r1, 
         m = 1 - TRAC_FRONT(2);
         r1 = 1 - TRAC_FRONT(3);
         r2 = 1 - TRAC_FRONT(4);
-
+        break;
     case 1:
         l2 = 1 - TRAC_LEFT(0);
         l1 = 1 - TRAC_LEFT(1);
         m = 1 - TRAC_LEFT(2);
         r1 = 1 - TRAC_LEFT(3);
         r2 = 1 - TRAC_LEFT(4);
-
+        break;
     case 2:
         l2 = 1 - TRAC_RIGHT(0);
         l1 = 1 - TRAC_RIGHT(1);
         m = 1 - TRAC_RIGHT(2);
         r1 = 1 - TRAC_RIGHT(3);
         r2 = 1 - TRAC_RIGHT(4);
-
+        break;
     case 3:
         l2 = 1 - TRAC_BACK(0);
         l1 = 1 - TRAC_BACK(1);
@@ -73,8 +87,8 @@ float get_line_pos_with_trac(int index)
     float l2, l1, m, r1, r2;
     get_value_with_index(index, l2, l1, m, r1, r2);
 
-    float marginalization = ((l2 + l1 * 0.5) - (r1 * 0.5 + r2)) / 2;
-    marginalization *= 1 - m;
+    float marginalization = ((l2 * 2 + l1) - (r1 + r2 * 2)) / 2;
+    // marginalization *= 1 - m;
 
     return marginalization;
 }
@@ -87,13 +101,13 @@ float get_line_width(int index)
     return l2 + l1 + m + r1 + r2;
 }
 
-bool get_catch_raw(int index)
+bool get_crash_raw(int index)
 {
     float l2, l1, m, r1, r2;
     get_value_with_index(index, l2, l1, m, r1, r2);
     float pos = get_line_pos_with_trac(index);
 
-    if (abs(pos) < 0.2 && get_line_width(index) > 2.5)
+    if (abs(pos) < 0.2 && get_line_width(index) > 3.5)
     {
         return true;
     }
@@ -107,12 +121,12 @@ bool get_whether_in_cross()
 {
     float f, l, r, b;
 
-    f = get_line_pos_with_trac(0);
-    l = get_line_pos_with_trac(1);
-    r = get_line_pos_with_trac(2);
-    b = get_line_pos_with_trac(3);
+    f = TRAC_FRONT(2);
+    l = TRAC_LEFT(2);
+    r = TRAC_RIGHT(2);
+    b = TRAC_BACK(2);
 
-    if(f < 0.2 && l < 0.2 && r < 0.2 && b < 0.2)
+    if (f > 0.5 && l > 0.5 && r > 0.5 && b > 0.5)
     {
         return true;
     }

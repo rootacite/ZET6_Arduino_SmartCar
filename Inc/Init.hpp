@@ -10,11 +10,13 @@
 #include "Inc/bsp_ili9341_lcd.h"
 
 #include "def.h"
+#include "Inc/mpu.h"
 
 SPIClass HSPI2(PB15, PB14, PB13);
 RF24 *RADIO1 = nullptr;
 
 const byte address[5] = {0xFF, 0xDD, 0xEE, 0xAA, 0x22};
+HardwareSerial Serial_3(PD9, PD8);
 
 void SetupInit()
 {
@@ -37,6 +39,8 @@ void SetupInit()
     Serial2.setRx(PA10);
     Serial2.setTx(PA9);
     Serial2.begin(115200);
+
+    //Serial_3.begin(115200);
 
     /////////////////////////
     /// Pull up BK and RST Pin
@@ -84,6 +88,17 @@ void SetupInit()
     pinMode(BACK_DIR, OUTPUT);
     digitalWrite(BACK_DIR, LOW);
 
+    //////////////
+    /// Init Hand
+    //////////////
+
+    pinMode(HAND, OUTPUT);
+    pinMode(ARM_UPDOWM, OUTPUT);
+    pinMode(ARM_ROUND, OUTPUT);
+    pinMode(ARM_FB, OUTPUT);
+    pinMode(PLANT, OUTPUT);
+
+
     /////////////////////////////////////////
     /// Init 2.4G Communication
     /////////////////////////////////////////
@@ -101,4 +116,10 @@ void SetupInit()
     RADIO1->setCRCLength(RF24_CRC_16);
     RADIO1->openReadingPipe(0, address);
     RADIO1->startListening(); */
+
+    /////////////////
+    /// Init MPU6050
+    /////////////////
+    
+
 }
